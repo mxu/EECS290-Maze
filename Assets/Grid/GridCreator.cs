@@ -22,6 +22,9 @@ public class GridCreator : MonoBehaviour {
 	//Monsters
 	public GameObject monsters;
 
+	//Health Packs
+	public GameObject healthPack;
+
 	public int NumMonsters;
 	public GameObject MonsterPrefab;
 
@@ -218,7 +221,11 @@ public class GridCreator : MonoBehaviour {
 		
 		// The 'next' transform's material color becomes white.
 		next.renderer.material.color = Color.white;
+
+		//Randomly spawns monster
 		GameManager.TriggerMonsterSpawn(next, Size.x, monsters);
+		//Randomly spawns health pack
+		GameManager.TriggerHealthPackSpawn(next, Size.x, healthPack);
 		// We add this 'next' transform to the Set our function.
 		AddToSet(next);
 		// Recursively call this function as soon as it finishes.

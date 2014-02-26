@@ -5,6 +5,9 @@ MonoImporter:
   defaultReferences:
   - CellPrefab: {instanceID: 0}
   - player: {instanceID: 0}
+  - monsters: {instanceID: 0}
+  - healthPack: {instanceID: 0}
+  - MonsterPrefab: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

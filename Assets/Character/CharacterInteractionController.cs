@@ -26,6 +26,7 @@ public class CharacterInteractionController : MonoBehaviour {
 	}
 
 	//Deals damage to the player
+	//Can only take values between 0.0 and 1.0
 	 void dealDamage(float damage){
 		hp.progress -= damage;
 	}
