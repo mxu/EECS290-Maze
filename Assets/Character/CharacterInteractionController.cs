@@ -4,14 +4,13 @@ using System.Collections;
 public class CharacterInteractionController : MonoBehaviour {
 
 	public HealthBar hp;
-	private float damage = .01f;
 	public GameObject MonsterRagdoll;
+	private float damage = .01f;
 
 	void Start () {
 		hp = transform.GetComponentInChildren<HealthBar>();
-	}
-
-	//Happens when a monsters attacks a player
+		}
+	
 	void OnTriggerStay(Collider c){
 		if(c.gameObject.tag.Equals("Monster")){
 			c.gameObject.GetComponent<MonsterAnimator>().Beatdown();
@@ -35,10 +34,11 @@ public class CharacterInteractionController : MonoBehaviour {
 
 	void KillMonsters(GameObject Monster){
 		Transform T = Monster.transform;
-		GameObject.Instantiate(MonsterRagdoll, new Vector3(T.position.x, T.position.y, T.position.z), T.rotation); 
 		Destroy(Monster);
+		Object Ragdoll = GameObject.Instantiate(MonsterRagdoll, new Vector3(T.position.x, T.position.y, T.position.z), T.rotation); 
+		Destroy(Ragdoll, 10f);
 	}
-
+	
 	//Deals damage to the player
 	 public void DealDamage(){
 		if(hp.progress <= 0f){

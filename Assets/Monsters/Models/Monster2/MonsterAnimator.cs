@@ -19,15 +19,13 @@ public class MonsterAnimator : MonoBehaviour {
 	private float MinVisibleDistance = .75f;
 	private float MonsterSightRange = 2f;
 
-
 	// Use this for initialization
 	void Start () {
 		Index = - 1;
 		Path = GameObject.Find("Grid").GetComponent<GridCreator>().PathCells;
 		Previous = transform;
-		Player = null;
-		Debug.Log (Player);
 	}
+
 
 	//Turns this monster towards the player GameObject
 	public void LookAtPlayer(){
@@ -67,54 +65,21 @@ public class MonsterAnimator : MonoBehaviour {
 			TimeToSlap = false;
 		}
 	}
-
+	
 	void CanSeePlayer(){
 		RaycastHit hit;
-		Player = GameObject.FindGameObjectWithTag("Player");
-
 		float DistanceToPlayer = Vector3.Distance(Player.transform.position, transform.position);
 		Vector3 LookDirection = Player.transform.position - transform.position;
-		if(Physics.Raycast ((Vector3)transform.position,(Vector3) LookDirection, out hit)){
-			if((hit.transform.tag == "Player") && (DistanceToPlayer <= MinVisibleDistance)){
-				TimeToRun = true;
-			}
-			else{
-				TimeToRun = false;
-			}
-		}
-		if((Vector3.Angle(LookDirection, transform.forward)) < ViewAngle){
-			if (Physics.Raycast (transform.position, LookDirection, out hit, MonsterSightRange)) {
-				if (hit.transform.tag == "Player") {
-					TimeToRun = true;
-				}else{
-					TimeToRun = false;
-				}
-			}
+		TimeToRun = (Physics.Raycast ((Vector3)transform.position,(Vector3) LookDirection, out hit)) && ((hit.transform.tag == "Player") && (DistanceToPlayer <= MinVisibleDistance));
+		if(!TimeToRun){
+			TimeToRun = ((Vector3.Angle(LookDirection, transform.forward)) < ViewAngle) && (Physics.Raycast (transform.position, LookDirection, out hit, MonsterSightRange)) && (hit.transform.tag == "Player");
 		}
 	}
 
-	int[] GetCoordinates(){
-		int Xpos;
-		int Zpos;
-		if (transform.position.x < 0){
-			Xpos = 0;
-		}
-		else if ((transform.position.x % 1) > .5){
-			Xpos = (int)transform.position.x + 1;
-		}
-		else{
-			Xpos = (int)transform.position.x;
-		}
-		if (transform.position.z < 0){
-			Zpos = 0;
-		}
-		else if (transform.position.z % 1 > .5){
-			Zpos = (int)transform.position.z + 1;
-		}
-		else{
-			Zpos = (int)transform.position.z;
-		}
-		return  new int[2]{Xpos, Zpos};
+	int[] GetMonsterCoordinates(){
+		int Xpos = transform.position.x % 1 > .5 ? (int)transform.position.x + 1 : (int)transform.position.x;
+		int Zpos = transform.position.z % 1 > .5 ? (int)transform.position.z + 1 : (int)transform.position.z;
+		return new int[2]{Xpos, Zpos};
 	}
 
 		
@@ -123,8 +88,7 @@ public class MonsterAnimator : MonoBehaviour {
 		Player = GameObject.FindGameObjectWithTag("Player");
 		CanSeePlayer();
 		if ((Index == - 1 || (transform.position.x == Next.position.x && transform.position.z == Next.position.z)) && (!TimeToRun && !TimeToSlap)){
-
-			int[] MonsterCoordinates = GetCoordinates();
+			int[] MonsterCoordinates = GetMonsterCoordinates();
 			List<Transform> CurrentCellOpen = new List<Transform>();
 			GameObject CurrentCell = GameObject.Find("(" + MonsterCoordinates[0] + "," + "0" + "," + MonsterCoordinates[1] + ")");
 			List<Transform> CurrentCellAdj = CurrentCell.GetComponent<CellScript>().Adjacents;
@@ -136,15 +100,18 @@ public class MonsterAnimator : MonoBehaviour {
 				}
 			}
 			Index = Random.Range (0, CurrentCellOpen.Count - 1);
+		
 			if (CurrentCellOpen[Index].position.Equals(Previous.position) && CurrentCellOpen.Count > 1 && Index < CurrentCellOpen.Count - 1){
 				Index++;
 			}
 			else if(CurrentCellOpen[Index].position.Equals(Previous.position) && CurrentCellOpen.Count > 1 && Index > 0){
 				Index--;
 			}
+
 			if(!Next.Equals (null)){
 				Previous = Next;
 			}
+
 			Next = CurrentCellOpen[Index];
 			Target = new Vector3(Next.position.x, transform.position.y, Next.position.z);
 			transform.LookAt (Target);
