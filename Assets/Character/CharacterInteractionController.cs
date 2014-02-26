@@ -30,7 +30,7 @@ public class CharacterInteractionController : MonoBehaviour {
 	}
 
 	//Deals damage to the player
-	 public void dealDamage(){
+	 public void DealDamage(){
 		if(hp.progress <= 0f){
 			GameManager.TriggerGameOver();
 		}

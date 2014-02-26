@@ -14,7 +14,7 @@ public class MonsterAnimator : MonoBehaviour {
 	private Vector3 Target;
 	private bool TimeToSlap = false;
 	private bool TimeToRun = false;
-	private GameObject Player;
+	private GameObject Player = null;
 	private float ViewAngle = 70;
 	private float MinVisibleDistance = .75f;
 	private float MonsterSightRange = 2f;
@@ -25,6 +25,8 @@ public class MonsterAnimator : MonoBehaviour {
 		Index = - 1;
 		Path = GameObject.Find("Grid").GetComponent<GridCreator>().PathCells;
 		Previous = transform;
+		Player = new GameObject();
+		Debug.Log (Player);
 	}
 
 	//Turns this monster towards the player GameObject
@@ -50,7 +52,7 @@ public class MonsterAnimator : MonoBehaviour {
 		animation.Play ("bitchslap");
 		TimeToSlap = true;
 		Index = -1;
-		Player.GetComponent<CharacterInteractionController>().dealDamage();
+		Player.GetComponent<CharacterInteractionController>().DealDamage();
 	}
 
 	void OnCollisionStay(Collision col){
@@ -67,7 +69,9 @@ public class MonsterAnimator : MonoBehaviour {
 
 	void CanSeePlayer(){
 		RaycastHit hit;
-		float DistanceToPlayer = Vector3.Distance(Player.transform.position, transform.position);
+		Player = GameObject.FindGameObjectWithTag("Player");
+
+		float DistanceToPlayer = Vector3.Distance(/*Player.*/transform.position, transform.position);
 		Vector3 LookDirection = Player.transform.position - transform.position;
 		if(Physics.Raycast ((Vector3)transform.position,(Vector3) LookDirection, out hit)){
 			if((hit.transform.tag == "Player") && (DistanceToPlayer <= MinVisibleDistance)){
@@ -79,7 +83,6 @@ public class MonsterAnimator : MonoBehaviour {
 		}
 		if((Vector3.Angle(LookDirection, transform.forward)) < ViewAngle){ // Detect if player is within the field of view
 			if (Physics.Raycast (transform.position, LookDirection, out hit, MonsterSightRange)) {
-				
 				if (hit.transform.tag == "Player") {
 					//Debug.Log("Can see player");
 					TimeToRun = true;
@@ -121,6 +124,7 @@ public class MonsterAnimator : MonoBehaviour {
 		Player = GameObject.FindGameObjectWithTag("Player");
 		CanSeePlayer();
 		if ((Index == - 1 || (transform.position.x == Next.position.x && transform.position.z == Next.position.z)) && (!TimeToRun && !TimeToSlap)){
+
 			int[] MonsterCoordinates = GetCoordinates();
 			List<Transform> CurrentCellOpen = new List<Transform>();
 			GameObject CurrentCell = GameObject.Find("(" + MonsterCoordinates[0] + "," + "0" + "," + MonsterCoordinates[1] + ")");
