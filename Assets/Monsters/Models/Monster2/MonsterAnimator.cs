@@ -25,7 +25,7 @@ public class MonsterAnimator : MonoBehaviour {
 		Index = - 1;
 		Path = GameObject.Find("Grid").GetComponent<GridCreator>().PathCells;
 		Previous = transform;
-		Player = new GameObject();
+		Player = null;
 		Debug.Log (Player);
 	}
 
@@ -43,6 +43,7 @@ public class MonsterAnimator : MonoBehaviour {
 		if (col.gameObject.tag.Equals ("Player")){
 			LookAtPlayer();
 			TimeToSlap = true;
+
 		}
 	}
 
@@ -71,7 +72,7 @@ public class MonsterAnimator : MonoBehaviour {
 		RaycastHit hit;
 		Player = GameObject.FindGameObjectWithTag("Player");
 
-		float DistanceToPlayer = Vector3.Distance(/*Player.*/transform.position, transform.position);
+		float DistanceToPlayer = Vector3.Distance(Player.transform.position, transform.position);
 		Vector3 LookDirection = Player.transform.position - transform.position;
 		if(Physics.Raycast ((Vector3)transform.position,(Vector3) LookDirection, out hit)){
 			if((hit.transform.tag == "Player") && (DistanceToPlayer <= MinVisibleDistance)){
@@ -81,13 +82,11 @@ public class MonsterAnimator : MonoBehaviour {
 				TimeToRun = false;
 			}
 		}
-		if((Vector3.Angle(LookDirection, transform.forward)) < ViewAngle){ // Detect if player is within the field of view
+		if((Vector3.Angle(LookDirection, transform.forward)) < ViewAngle){
 			if (Physics.Raycast (transform.position, LookDirection, out hit, MonsterSightRange)) {
 				if (hit.transform.tag == "Player") {
-					//Debug.Log("Can see player");
 					TimeToRun = true;
 				}else{
-					//Debug.Log("Can not see player");
 					TimeToRun = false;
 				}
 			}

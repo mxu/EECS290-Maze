@@ -5,6 +5,7 @@ public class CharacterInteractionController : MonoBehaviour {
 
 	public HealthBar hp;
 	private float damage = .01f;
+	public GameObject MonsterRagdoll;
 
 	void Start () {
 		hp = transform.GetComponentInChildren<HealthBar>();
@@ -14,6 +15,9 @@ public class CharacterInteractionController : MonoBehaviour {
 	void OnTriggerStay(Collider c){
 		if(c.gameObject.tag.Equals("Monster")){
 			c.gameObject.GetComponent<MonsterAnimator>().Beatdown();
+			if(Input.GetKeyDown(KeyCode.K)){
+				KillMonsters(c.gameObject);
+			}
 		}
 	}
 
@@ -27,6 +31,12 @@ public class CharacterInteractionController : MonoBehaviour {
 		if(c.gameObject.tag.Equals("Monster")){
 			c.gameObject.GetComponent<MonsterAnimator>().SetSlap(false);
 		}
+	}
+
+	void KillMonsters(GameObject Monster){
+		Transform T = Monster.transform;
+		GameObject.Instantiate(MonsterRagdoll, new Vector3(T.position.x, T.position.y, T.position.z), T.rotation); 
+		Destroy(Monster);
 	}
 
 	//Deals damage to the player
