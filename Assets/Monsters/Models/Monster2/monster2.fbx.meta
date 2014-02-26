@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: ae538d1ab529f3543ab0baf27003912e
 ModelImporter:
-  serializedVersion: 15
+  serializedVersion: 16
   fileIDToRecycleName:
     100000: boventanden
     100002: chest
@@ -479,4 +479,5 @@ ModelImporter:
     rootMotionBoneName: 
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 1
+  additionalBone: 0
   userData: 

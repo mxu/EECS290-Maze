@@ -22,9 +22,11 @@ public class GridCreator : MonoBehaviour {
 	//Monsters
 	public GameObject monsters;
 
-	public int NumMonsters;
-	public GameObject MonsterPrefab;
+//	public int NumMonsters;
+//	public GameObject MonsterPrefab;
 
+	public List<Transform> PathCells;			// The cells in the path through the grid.
+	public List<List<Transform>> AdjSet;		// A list of lists representing available adjacent cells.
 	
 	// Use this for initialization
 	void Start () { 
@@ -117,8 +119,7 @@ public class GridCreator : MonoBehaviour {
 	 * Look at the Wikipedia page for more info on Prim's Algorithm.
 	 * http://en.wikipedia.org/wiki/Prim%27s_algorithm
 	 ********************************************************************/ 
-	public List<Transform> PathCells;			// The cells in the path through the grid.
-	public List<List<Transform>> AdjSet;		// A list of lists representing available adjacent cells.
+
 	/** Here is the structure:
 	 *  AdjSet{
 	 * 		[ 0 ] is a list of all the cells

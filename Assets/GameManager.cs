@@ -28,13 +28,13 @@ public static class GameManager {
 	//Spawn Monsters on map
 	public static void TriggerMonsterSpawn(Transform spawnCell, float sizeOfGrid, GameObject monsterPrefab){
 		if(numberOfMonsters == -1){
-			numberOfMonsters = (int)sizeOfGrid/2;
+			numberOfMonsters = 2;//(int)sizeOfGrid/2;
 			Debug.Log(numberOfMonsters);
 		}
-		if(Random.Range(0, 10)%2 == 0){
+		if(Random.Range(0, 10) % 2 == 0){
 			if(numberOfMonsters > 0){
 				GameObject currentMonster = (GameObject)GameObject.Instantiate(monsterPrefab, new Vector3(spawnCell.position.x, 0.5f, spawnCell.position.z), Quaternion.identity);
-				currentMonster.transform.localScale -= new Vector3(.8f, .8f, .8f);
+				currentMonster.transform.localScale -= new Vector3(.75f, .75f, .75f);
 				numberOfMonsters--;
 				Debug.Log("Monster spawned");
 			}
@@ -43,6 +43,4 @@ public static class GameManager {
 		}
 
 	}
-
-
 }
