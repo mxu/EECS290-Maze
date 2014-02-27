@@ -8,7 +8,8 @@ public static class GameManager {
 	private static int level = 1;
 	//Variable used to save and restore the player's health between levels
 	private static float playerHealth = 1f;
-	
+	private static float lightLevel = 1f;
+
 	public static void TriggerMazeBuilt() {
 		if(MazeBuilt != null) MazeBuilt();
 	}
@@ -29,6 +30,14 @@ public static class GameManager {
 
 	public static float loadHealth() {
 		return playerHealth;
+	}
+
+	public static void saveLight(float l) {
+		lightLevel = l;
+	}
+	
+	public static float loadLight() {
+		return lightLevel;
 	}
 
 	//Starts the game

@@ -19,13 +19,13 @@ public class GridCreator : MonoBehaviour {
 	public Transform[,] Grid;
 	public GameObject player;
 
-	//Monsters
+	// Prefabs
 	public GameObject monsters;
+	public GameObject batPacks;
+	public GameObject healthPacks;
 
 	public int NumMonsters;
-	public GameObject MonsterPrefab;
 
-	
 	// Use this for initialization
 	void Start () {
 		GameManager.MazeBuilt += MazeBuilt;
@@ -40,30 +40,41 @@ public class GridCreator : MonoBehaviour {
 	{
 		BuildWalls();
 		SpawnPlayer();
-		SpawnMonsters();
+		SpawnEntities();
 	}
 
-	private void SpawnMonsters() {
-		// Spawn monsters inside the maze once it's built
-		// Keep track of which cells have already spawned a monster
+	private void SpawnEntities() {
+		// Spawn monsters and drops inside the maze once it's built
 		List<Transform> occupied = new List<Transform>();
 		// # of monsters = 10% of number of non-wall cells
 		int numMonsters = Mathf.RoundToInt(PathCells.Count * 0.1f);
-		Debug.Log("Spawning " + numMonsters + " monsters along " + PathCells.Count + "  cells");
-		while(numMonsters-- > 0) {
+		int numDrops = numMonsters - GameManager.getLevel();
+		Debug.Log("Spawning " + numMonsters + " monsters and " + numDrops + " drops along " + PathCells.Count + "  cells");
+		while(numMonsters > 0 || numDrops > 0) {
 			// Get an empty cell
 			Transform cell;
 			do {
 				cell = PathCells[Random.Range(1, PathCells.Count - 2)];
 			} while(occupied.Contains(cell));
-			// Put a monster on it
 			occupied.Add(cell);
-			GameObject monster = (GameObject)Instantiate(monsters, new Vector3(cell.position.x, 0.5f, cell.position.z), Quaternion.identity);
-			monster.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
-			Debug.Log("Monster #" + numMonsters + " spawned on cell " + cell.name);
+			Vector3 pos = new Vector3(cell.position.x, 0.5f, cell.position.z);
+			// Put a monster on it
+			if(numMonsters > 0) {
+				GameObject monster = (GameObject)Instantiate(monsters, pos, Quaternion.identity);
+				monster.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+				Debug.Log("Monster #" + numMonsters + " spawned on cell " + cell.name);
+				numMonsters--;
+			} else {
+				pos.y = .65f;
+				GameObject prefab = Random.Range(0, 10) > 3 ? batPacks : healthPacks;
+				GameObject drop = (GameObject)Instantiate(prefab, pos, Quaternion.identity);
+				drop.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+				Debug.Log(drop.name + " spawned on cell " + cell.name);
+				numDrops--;
+			}
 		}
-		
 	}
+
 
 	//To be called when start is pressed.
 	public static void Build(){
