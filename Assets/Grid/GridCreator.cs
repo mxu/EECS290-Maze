@@ -27,14 +27,42 @@ public class GridCreator : MonoBehaviour {
 
 	
 	// Use this for initialization
-	void Start () { 
+	void Start () {
+		GameManager.MazeBuilt += MazeBuilt;
 		CreateGrid();
 		SetRandomNumbers();
 		SetAdjacents();
 		SetStart();
 		FindNext();
+	}
+
+	void MazeBuilt ()
+	{
 		BuildWalls();
-//		SpawnMonsters();
+		SpawnPlayer();
+		SpawnMonsters();
+	}
+
+	private void SpawnMonsters() {
+		// Spawn monsters inside the maze once it's built
+		// Keep track of which cells have already spawned a monster
+		List<Transform> occupied = new List<Transform>();
+		// # of monsters = 10% of number of non-wall cells
+		int numMonsters = Mathf.RoundToInt(PathCells.Count * 0.1f);
+		Debug.Log("Spawning " + numMonsters + " monsters along " + PathCells.Count + "  cells");
+		while(numMonsters-- > 0) {
+			// Get an empty cell
+			Transform cell;
+			do {
+				cell = PathCells[Random.Range(1, PathCells.Count - 2)];
+			} while(occupied.Contains(cell));
+			// Put a monster on it
+			occupied.Add(cell);
+			GameObject monster = (GameObject)Instantiate(monsters, new Vector3(cell.position.x, 0.5f, cell.position.z), Quaternion.identity);
+			monster.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+			Debug.Log("Monster #" + numMonsters + " spawned on cell " + cell.name);
+		}
+		
 	}
 
 	//To be called when start is pressed.
@@ -49,6 +77,8 @@ public class GridCreator : MonoBehaviour {
 
 	// Creates the grid by instantiating provided cell prefabs.
 	void CreateGrid () {
+		Size.x = Size.z = GameManager.getLevel() * 3 + 2;
+		Debug.Log ("Level " + GameManager.getLevel() + ": " + Size.x + "x" + Size.z);
 		Grid = new Transform[(int)Size.x,(int)Size.z];
 		
 		// Places the cells and names them according to their coordinates in the grid.
@@ -190,8 +220,9 @@ public class GridCreator : MonoBehaviour {
 			if (isEmpty) { 
 				Debug.Log("Generation completed in " + Time.timeSinceLevelLoad + " seconds."); 
 				//CancelInvoke("FindNext"); ???
-				PathCells[PathCells.Count - 1].renderer.material.color = Color.red;
-				
+				Transform finish = PathCells[PathCells.Count - 1];
+				finish.renderer.material.color = Color.red;
+				finish.tag = "Finish";
 				foreach (Transform cell in Grid) {
 					// Removes displayed weight
 					cell.GetComponentInChildren<TextMesh>().renderer.enabled = false;
@@ -205,7 +236,6 @@ public class GridCreator : MonoBehaviour {
 				}
 
 				GameManager.TriggerMazeBuilt();
-				SpawnPlayer();
 				return;
 			}
 			// If we did not finish, then:
@@ -218,7 +248,6 @@ public class GridCreator : MonoBehaviour {
 		
 		// The 'next' transform's material color becomes white.
 		next.renderer.material.color = Color.white;
-		GameManager.TriggerMonsterSpawn(next, Size.x, monsters);
 		// We add this 'next' transform to the Set our function.
 		AddToSet(next);
 		// Recursively call this function as soon as it finishes.
@@ -239,17 +268,13 @@ public class GridCreator : MonoBehaviour {
 			new Vector3 (1, 2, Size.z),
 			new Vector3 (1, 2, Size.z)
 		};
+		Debug.Log("Building " + Size.x + "x" + Size.z + " wall");
 		for(int i = 0; i < 4; i++) {
 			Transform wall = (Transform)Instantiate (CellPrefab, pos[i], Quaternion.identity);
 			wall.renderer.material.color = Color.black;
 			wall.localScale = scales[i];
 			wall.GetComponentInChildren<TextMesh> ().renderer.enabled = false;
 		}
-
-//		Transform ceiling = (Transform)Instantiate (CellPrefab, new Vector3 (Size.x / 2 - 0.5f, 3.0f, Size.z / 2 - 0.5f), Quaternion.identity);
-//		ceiling.renderer.material.color = Color.black;
-//		ceiling.localScale = new Vector3 (Size.x, 1, Size.z);
-//		ceiling.GetComponentInChildren<TextMesh> ().renderer.enabled = false;
 	}
 
 	//Remove this method later, make it in the game event manager in the long run.
@@ -258,27 +283,13 @@ public class GridCreator : MonoBehaviour {
 		Debug.Log ("The player has spawned!");
 	}
 
-//	void SpawnMonsters(){
-//		int i = 0;
-//		while (i < NumMonsters) {
-//			int xPos = Random.Range (0, (int)Size.x);
-//			int zPos = Random.Range (0, (int)Size.z);
-//			GameObject CurrentCell = GameObject.Find("(" + xPos + ",0," + zPos + ")");
-//			if (CurrentCell.transform.position.y == 0f){
-//				GameObject Monster = (GameObject) Instantiate(MonsterPrefab, new Vector3(xPos, .5f, zPos), Quaternion.identity);
-//				Monster.SetActive(true);
-//				Monster.name = "Monster " + i;
-//				i++;
-//			}
-//		}
-//	}
-
 	// Called once per frame.
 	void Update() {
 		
 		// Pressing 'F1' will generate a new maze.
 		if (Input.GetKeyDown(KeyCode.F1)) {
-			Application.LoadLevel(0);
+			GameManager.TriggerLevelComplete();
+			//Application.LoadLevel(0);
 		}
 	}
 }
