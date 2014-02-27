@@ -35,7 +35,9 @@ public class CharacterInteractionController : MonoBehaviour {
 	void KillMonsters(GameObject Monster){
 		Transform T = Monster.transform;
 		Destroy(Monster);
-		Object Ragdoll = GameObject.Instantiate(MonsterRagdoll, new Vector3(T.position.x, T.position.y, T.position.z), T.rotation); 
+		GameObject Ragdoll = (GameObject)GameObject.Instantiate(MonsterRagdoll, new Vector3(T.position.x, T.position.y, T.position.z), T.rotation); 
+		//Ragdoll.transform.Rotate(new Vector3(-20f, 0f, 0f));
+		//Ragdoll.rigidbody.AddForce (Vector3.back * 100);
 		Destroy(Ragdoll, 10f);
 	}
 	
