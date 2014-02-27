@@ -62,6 +62,7 @@ public class GridCreator : MonoBehaviour {
 			if(numMonsters > 0) {
 				GameObject monster = (GameObject)Instantiate(monsters, pos, Quaternion.identity);
 				monster.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+				monster.tag = "Monster";
 				Debug.Log("Monster #" + numMonsters + " spawned on cell " + cell.name);
 				numMonsters--;
 			} else {
@@ -101,6 +102,7 @@ public class GridCreator : MonoBehaviour {
 				newCell.parent = transform;
 				newCell.GetComponent<CellScript>().Position = new Vector3(x, 0, z);
 				Grid[x,z] = newCell;
+				newCell.tag = "Scenery";
 			}
 		}
 		// Centers the camera on the maze.
@@ -285,6 +287,7 @@ public class GridCreator : MonoBehaviour {
 			wall.renderer.material.color = Color.black;
 			wall.localScale = scales[i];
 			wall.GetComponentInChildren<TextMesh> ().renderer.enabled = false;
+			wall.tag = "Scenery";
 		}
 	}
 
