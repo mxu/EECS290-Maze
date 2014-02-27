@@ -15,7 +15,7 @@ public class CharacterInteractionController : MonoBehaviour {
 
 	//Happens when a monsters attacks a player
 	void OnControllerColliderHit(ControllerColliderHit hit){
-		Debug.Log("Collide!");
+//		Debug.Log("Collide!");
 		if(hit.gameObject.CompareTag("Monster")){
 			hit.gameObject.GetComponent<MonsterAnimator>().animation.Play("bitchslap");
 

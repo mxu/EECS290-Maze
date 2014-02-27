@@ -14,7 +14,7 @@ public class FlashLight : MonoBehaviour {
 	void Update () {
 		if(light.enabled == true){
 			if(light.intensity >= .10f){
-				light.intensity -= .001f;
+				light.intensity -= Time.deltaTime * .001f;
 			}
 			else{
 			}

@@ -94,7 +94,7 @@ public static class GameManager {
 			//Spawns the health pack if the random number is in a certain range.
 			if(Random.Range(0,10)%3 == 0){
 				if(numberOfHealthPacks >0){
-					GameObject currentPack = (GameObject)GameObject.Instantiate(healthPackPrefab, new Vector3(spawnCell.position.x, .75f, spawnCell.position.z), Quaternion.identity);
+					GameObject currentPack = (GameObject)GameObject.Instantiate(healthPackPrefab, new Vector3(spawnCell.position.x, .65f, spawnCell.position.z), Quaternion.identity);
 					currentPack.transform.localScale -= new Vector3(.05f, .05f, .05f);
 
 					//Decrements health pack count
@@ -129,7 +129,7 @@ public static class GameManager {
 
 			//Spawn the battery packs
 			if(numberOfBatteryPacks >0){
-				GameObject currentBattery = (GameObject)GameObject.Instantiate(batteryPackPrefab, new Vector3(spawnCell.position.x, .75f, spawnCell.position.z), Quaternion.identity);
+				GameObject currentBattery = (GameObject)GameObject.Instantiate(batteryPackPrefab, new Vector3(spawnCell.position.x, .65f, spawnCell.position.z), Quaternion.identity);
 				currentBattery.transform.localScale -= new Vector3(.05f, .05f, .05f);
 
 				//Decrements the health pack count
