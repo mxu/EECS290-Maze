@@ -28,14 +28,4 @@ public class HealthBar : MonoBehaviour {
 		GUI.EndGroup();
 		GUI.EndGroup();
 	}
-	
-	// Use this for initialization
-	void Start () {
-	}
-
-
-	// Update is called once per frame
-	void Update() {
-
-	}
 }

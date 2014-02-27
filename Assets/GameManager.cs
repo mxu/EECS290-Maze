@@ -19,7 +19,7 @@ public static class GameManager {
 
 	//Called when the player has zero health.
 	public static void TriggerGameOver(){
-		Application.LoadLevel("GameOverMenue");
+		Application.LoadLevel("GameOverMenu");
 
 		//Reset number of monsters for next game.
 		numberOfMonsters = -1;

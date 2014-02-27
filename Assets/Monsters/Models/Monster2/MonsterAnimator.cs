@@ -3,7 +3,7 @@ using System.Collections;
 
 public class MonsterAnimator : MonoBehaviour {
 	
-
+	private float health = 1.0f;
 //	private float runSpeed = .02f;
 //	private float walkSpeed = .01f;
 //	private float turnSpeed = .005f;
@@ -24,6 +24,10 @@ public class MonsterAnimator : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+	
+		if (health <= 0) 
+			Destroy(this.gameObject);
+		
 //		GameObject FPS = GameObject.FindGameObjectWithTag("Player");
 //
 //			if (((FPS.transform.position.x - transform.position.x) <= 10) && ((FPS.transform.position.x - transform.position.x) >=-10)  && ((FPS.transform.position.z - transform.position.z) <=10) && ((FPS.transform.position.z - transform.position.z) >= -10)){
@@ -47,8 +51,9 @@ public class MonsterAnimator : MonoBehaviour {
 //					timer = 15;
 //				}
 //			}
-
-
 	}
-
+	
+	public void dealDamage(float dmg) {
+		health = health - dmg;
+	}
 }

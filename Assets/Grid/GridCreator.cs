@@ -60,6 +60,7 @@ public class GridCreator : MonoBehaviour {
 				newCell.parent = transform;
 				newCell.GetComponent<CellScript>().Position = new Vector3(x, 0, z);
 				Grid[x,z] = newCell;
+				newCell.tag = "Scenery";
 			}
 		}
 		// Centers the camera on the maze.
@@ -244,6 +245,7 @@ public class GridCreator : MonoBehaviour {
 			wall.renderer.material.color = Color.black;
 			wall.localScale = scales[i];
 			wall.GetComponentInChildren<TextMesh> ().renderer.enabled = false;
+			wall.tag = "Scenery";
 		}
 
 //		Transform ceiling = (Transform)Instantiate (CellPrefab, new Vector3 (Size.x / 2 - 0.5f, 3.0f, Size.z / 2 - 0.5f), Quaternion.identity);
