@@ -5,8 +5,12 @@ public class CharacterInteractionController : MonoBehaviour {
 
 	public HealthBar hp;
 
+	private static bool flashLightOn = false;
+	Light flashLight;
+
 	void Start () {
 		hp = transform.GetComponentInChildren<HealthBar>();
+		flashLight = transform.GetComponentInChildren<Light>();
 	}
 
 	//Happens when a monsters attacks a player
@@ -29,6 +33,25 @@ public class CharacterInteractionController : MonoBehaviour {
 	//Can only take values between 0.0 and 1.0
 	 void dealDamage(float damage){
 		hp.progress -= damage;
+	}
+
+	void Update(){
+		//Checks if the F key is down and whether the boolean is on or off.
+		
+		if(Input.GetKeyDown(KeyCode.F) && flashLightOn == false){
+			
+			flashLightOn = true; //If the f key is down and the boolean is false, it sets the boolean to true.
+			flashLight.enabled = !flashLight.enabled;
+			
+		} else {
+			
+			if(Input.GetKeyDown(KeyCode.F) && flashLightOn == true) {
+				
+				flashLightOn = false;//If the f key is down and the boolean is true, it sets the boolean to false.
+				flashLight.enabled = !flashLight.enabled;
+			}
+			
+		}
 	}
 
 }

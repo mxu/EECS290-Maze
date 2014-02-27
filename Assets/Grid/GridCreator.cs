@@ -25,6 +25,9 @@ public class GridCreator : MonoBehaviour {
 	//Health Packs
 	public GameObject healthPack;
 
+	//Batteries
+	public GameObject batteryPack;
+
 	public int NumMonsters;
 	public GameObject MonsterPrefab;
 
@@ -226,6 +229,10 @@ public class GridCreator : MonoBehaviour {
 		GameManager.TriggerMonsterSpawn(next, Size.x, monsters);
 		//Randomly spawns health pack
 		GameManager.TriggerHealthPackSpawn(next, Size.x, healthPack);
+		//Ramdomly spawns battery packs
+		GameManager.TriggerBatteryPackSpawn(next, Size.x, batteryPack);
+
+
 		// We add this 'next' transform to the Set our function.
 		AddToSet(next);
 		// Recursively call this function as soon as it finishes.
