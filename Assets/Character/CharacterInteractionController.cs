@@ -74,7 +74,7 @@ public class CharacterInteractionController : MonoBehaviour {
 		}
 	}
 
-	//Deals damage to the player, kills player if health gets to 0
+	//Deals damage to the player, kills player if health gets too low
 	 public void DealPlayerDamage(float damage){
 		if(hp.progress <= 0f){
 			GameManager.TriggerGameOver();

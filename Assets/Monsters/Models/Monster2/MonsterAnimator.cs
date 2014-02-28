@@ -3,12 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class MonsterAnimator : MonoBehaviour {
-	
+
+	//ragdoll prefab
 	public GameObject MonsterRagdoll;
 	private float RunSpeed = .5f;
 	private float WalkSpeed = .15f;
 	private List<Transform> Path;
+	//next cell to walk to
 	private Transform Next;
+	//previous cell
 	private Transform Previous;
 	private int Index = -1;
 	private Vector3 Target;
@@ -58,7 +61,6 @@ public class MonsterAnimator : MonoBehaviour {
 	
 	void OnCollisionStay(Collision col){
 		if (col.gameObject.tag.Equals ("Player")){
-			Debug.Log ("This shit too");
 			Beatdown();
 		}
 	}
@@ -68,7 +70,9 @@ public class MonsterAnimator : MonoBehaviour {
 			TimeToSlap = false;
 		}
 	}
-	
+
+	//tests to see if player is visible within distance parameter and view angle
+	//tests to see if player is within minimum distance parameter
 	void CanSeePlayer(){
 		RaycastHit hit;
 		float DistanceToPlayer = Vector3.Distance(Player.transform.position, transform.position);
@@ -78,13 +82,16 @@ public class MonsterAnimator : MonoBehaviour {
 			TimeToRun = ((Vector3.Angle(LookDirection, transform.forward)) < ViewAngle) && (Physics.Raycast (transform.position, LookDirection, out hit, MonsterSightRange)) && (hit.transform.tag == "Player");
 		}
 	}
-	
+
+	//finds the coordinates of the cell that the monster is in
 	int[] GetMonsterCoordinates(){
 		int Xpos = transform.position.x % 1 > .5 ? (int)transform.position.x + 1 : (int)transform.position.x;
 		int Zpos = transform.position.z % 1 > .5 ? (int)transform.position.z + 1 : (int)transform.position.z;
 		return new int[2]{Xpos, Zpos};
 	}
-	
+
+	//deals damage to the monster
+	//destroys monster and instantiates ragdoll if health goes too low
 	public void DealMonsterDamage(float damage){
 		if (MonsterHealth < 0 && !Dead){
 			Transform T = transform;
@@ -108,10 +115,13 @@ public class MonsterAnimator : MonoBehaviour {
 	void Update () {
 		Player = GameObject.FindGameObjectWithTag("Player");
 		CanSeePlayer();
+		//if player not visible, goal coordinates reached and not attacking
 		if ((Index == - 1 || (transform.position.x == Next.position.x && transform.position.z == Next.position.z)) && (!TimeToRun && !TimeToSlap)){
+			//find coordinates of monster's current cell
 			int[] MonsterCoordinates = GetMonsterCoordinates();
 			List<Transform> CurrentCellOpen = new List<Transform>();
 			GameObject CurrentCell = GameObject.Find("(" + MonsterCoordinates[0] + "," + "0" + "," + MonsterCoordinates[1] + ")");
+			//find all open adjacent cells
 			List<Transform> CurrentCellAdj = CurrentCell.GetComponent<CellScript>().Adjacents;
 			foreach(Transform t in CurrentCellAdj){
 				foreach(Transform OpenCell in Path){
@@ -121,18 +131,14 @@ public class MonsterAnimator : MonoBehaviour {
 				}
 			}
 			Index = Random.Range (0, CurrentCellOpen.Count - 1);
-			
-			if (CurrentCellOpen[Index].position.Equals(Previous.position) && CurrentCellOpen.Count > 1 && Index < CurrentCellOpen.Count - 1){
-				Index++;
+			//don't go in circles if avoidable
+			if (CurrentCellOpen[Index].position.Equals(Previous.position) && CurrentCellOpen.Count > 1){
+				CurrentCellOpen.Remove (Previous);
 			}
-			else if(CurrentCellOpen[Index].position.Equals(Previous.position) && CurrentCellOpen.Count > 1 && Index > 0){
-				Index--;
-			}
-			
 			if(!Next.Equals (null)){
 				Previous = Next;
 			}
-			
+			//set goal to randomly selected open cell and walk there
 			Next = CurrentCellOpen[Index];
 			Target = new Vector3(Next.position.x, transform.position.y, Next.position.z);
 			transform.LookAt (Target);
@@ -141,6 +147,7 @@ public class MonsterAnimator : MonoBehaviour {
 		if(!TimeToRun && !TimeToSlap){
 			transform.position = Vector3.MoveTowards(transform.position, Target, WalkSpeed * Time.deltaTime);
 		}
+		//else run at player
 		else if(TimeToRun && !TimeToSlap){
 			Index = - 1;
 			Target = new Vector3(Player.transform.position.x, transform.position.y, Player.transform.position.z);
