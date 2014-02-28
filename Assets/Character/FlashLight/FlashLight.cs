@@ -9,6 +9,7 @@ public class FlashLight : MonoBehaviour {
 		GameManager.LevelComplete += LevelComplete;
 	}
 
+	//Saves the light intensity between levels
 	void LevelComplete ()
 	{
 		GameManager.saveLight(light.intensity);

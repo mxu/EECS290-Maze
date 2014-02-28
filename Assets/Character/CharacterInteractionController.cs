@@ -3,14 +3,27 @@ using System.Collections;
 
 public class CharacterInteractionController : MonoBehaviour {
 
+	//Health bar
 	public HealthBar hp;
+	//Flashlight bar
 	public LightBar lp;
+	//Bullet
 	public Transform bullet;
+	//Reload Delay
 	private float reloadDelay;
+	//If the flash light is on
 	private static bool flashLightOn = false;
 	private bool reloaded;
+
+	//Flashlight
 	Light flashLight;
 
+	/// <summary>
+	/// Start this instance.
+	/// Creates the HP and LightBar references
+	/// Loads info from last level if needed, starts at 1
+	/// Gets the flashlight instance
+	/// </summary>
 	void Start () {
 		GameManager.LevelComplete += LevelComplete;
 		hp = transform.GetComponentInChildren<HealthBar>();
@@ -58,6 +71,10 @@ public class CharacterInteractionController : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Called when the level is over
+	/// Saves the health bar between levels
+	/// </summary>
 	void LevelComplete ()
 	{
 		GameManager.saveHealth(hp.progress);
@@ -83,7 +100,12 @@ public class CharacterInteractionController : MonoBehaviour {
 			hp.progress -= damage;
 		}
 	}
-	
+
+	/// <summary>
+	/// Called when the gun is fired
+	/// Defines the bullet object with its direction and force
+	/// Animates gun
+	/// </summary>
 	void shoot () {
 		Transform shot = (Transform)Instantiate(bullet, bullet.position, bullet.rotation);
 		shot.transform.localScale = new Vector3(.03f,.03f,.03f);
@@ -93,7 +115,7 @@ public class CharacterInteractionController : MonoBehaviour {
 		this.transform.GetChild(3).GetChild(0).audio.Play ();
 		
 	}
-
+	
 	void OnTriggerStay(Collider c){
 		if(c.gameObject.tag.Equals("Monster")){
 			c.gameObject.GetComponent<MonsterAnimator>().Beatdown();

@@ -11,7 +11,9 @@ public class PauseMenu : MonoBehaviour {
 		if(Input.GetKeyDown(KeyCode.Escape))
 			paused = togglePause();
 	}
-	
+
+	//Creates the pause screen overlay
+	//Checks if paused is true before overlaying
 	void OnGUI()
 	{
 		if(paused)
@@ -21,7 +23,9 @@ public class PauseMenu : MonoBehaviour {
 				paused = togglePause();
 		}
 	}
-	
+
+	//Called when the escape key is pressed,
+	//Stops time until the escape key is pressed again
 	bool togglePause()
 	{
 		if(Time.timeScale == 0f)

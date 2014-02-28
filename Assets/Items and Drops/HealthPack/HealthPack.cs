@@ -3,22 +3,31 @@ using System.Collections;
 
 public class HealthPack : MonoBehaviour {
 
+	//HP bar being referenced
 	public HealthBar hp;
+
+	//Upper and lower bounds for moving the cube up and down in animating
 	public Vector3 upperBound;
 	public Vector3 lowerBound;
+
+	//Doesn't allow the cube to move down if it is going up and vice versa
 	bool movingUp = true;
 
 
 	
 	void Start () {
+		//Sets the upper and lower bounds
 		upperBound = new Vector3(transform.position.x, transform.position.y + .05f, transform.position.z);
 		lowerBound = new Vector3(transform.position.x, transform.position.y - .05f, transform.position.z);
 	}
 
 	void Update(){
+		//Gets the HP bar being referenced
 		if(hp == null){
 			hp = GameObject.FindGameObjectWithTag("Player").transform.GetComponentInChildren<HealthBar>();
 		}
+
+		//Moves the cube up and down by comparing vectors
 		if(movingUp){
 			transform.position = Vector3.Lerp(transform.position, upperBound, Time.deltaTime);
 			if(Vector3.Magnitude(upperBound - transform.position) < .01f){

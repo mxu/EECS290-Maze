@@ -6,22 +6,36 @@ public class MonsterAnimator : MonoBehaviour {
 
 	//ragdoll prefab
 	public GameObject MonsterRagdoll;
+
+	//Speeds for movement
 	private float RunSpeed = .5f;
 	private float WalkSpeed = .15f;
+
+	//List of cells
 	private List<Transform> Path;
 	//next cell to walk to
 	private Transform Next;
 	//previous cell
 	private Transform Previous;
 	private int Index = -1;
+
+
 	private Vector3 Target;
 	private bool TimeToSlap = false;
 	private bool TimeToRun = false;
+
+	//Player object
 	private GameObject Player = null;
+
+	//Where the monster is able to see things
 	private float ViewAngle = 70;
+	//Minimum visible distance
 	private float MinVisibleDistance = .75f;
+	//Farthest it can see
 	private float MonsterSightRange = 2f;
+	//Total health
 	private float MonsterHealth = 1f;
+	//Denotes if the monster has died
 	private bool Dead = false;
 
 	
