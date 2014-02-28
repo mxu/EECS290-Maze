@@ -3,7 +3,7 @@ using System.Collections;
 
 public class BatteryController : MonoBehaviour {
 
-	public Light lightInstance;
+	public GameObject lightInstance;
 	public Vector3 upperBound;
 	public Vector3 lowerBound;
 	bool movingUp = true;
@@ -16,7 +16,7 @@ public class BatteryController : MonoBehaviour {
 
 	void Update(){
 		if(lightInstance == null){
-			lightInstance = GameObject.FindGameObjectWithTag("Player").transform.GetComponentInChildren<Light>();
+			lightInstance = GameObject.FindGameObjectWithTag("Player");
 		}
 		if(movingUp){
 			transform.position = Vector3.Lerp(transform.position, upperBound, Time.deltaTime);
@@ -38,7 +38,7 @@ public class BatteryController : MonoBehaviour {
 
 	void OnTriggerEnter(Collider col){
 		if(col.gameObject.CompareTag("Player")){
-			if(lightInstance.intensity >= 1f){
+			if(lightInstance.transform.GetChild(3).GetChild(1).GetComponent<Light>().intensity >= 1f){
 			}
 			else{
 				addElectricity(.1f);
@@ -51,6 +51,6 @@ public class BatteryController : MonoBehaviour {
 
 	//Adds the amount to the intensity of the light
 	void addElectricity(float amount){
-		lightInstance.intensity += amount;
+		lightInstance.transform.GetChild(3).GetChild(1).GetComponent<Light>().intensity += amount;
 	}
 }
