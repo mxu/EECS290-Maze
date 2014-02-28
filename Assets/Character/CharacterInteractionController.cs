@@ -67,23 +67,21 @@ public class CharacterInteractionController : MonoBehaviour {
 	void OnControllerColliderHit(ControllerColliderHit hit) { 
 		if(hit.gameObject.CompareTag("Monster")){
 			hit.gameObject.GetComponent<MonsterAnimator>().animation.Play("bitchslap");
-
-			if(hp.progress <= 0f){
-				GameManager.TriggerGameOver();
-			}
-			else{
-				dealDamage(.010f);
-				Debug.Log ("The player has been hit!");
-			}
+			DealPlayerDamage(.01f);
 		} else if(hit.gameObject.CompareTag("Finish")) {
 			Debug.Log("Finished");
 			GameManager.TriggerLevelComplete();
 		}
 	}
 
-	//Deals damage to the player
-	 void dealDamage(float damage){
-		hp.progress -= damage;
+	//Deals damage to the player, kills player if health gets to 0
+	 public void DealPlayerDamage(float damage){
+		if(hp.progress <= 0f){
+			GameManager.TriggerGameOver();
+		}
+		else{
+			hp.progress -= damage;
+		}
 	}
 	
 	void shoot () {
@@ -94,6 +92,24 @@ public class CharacterInteractionController : MonoBehaviour {
 		this.transform.GetChild(3).GetChild(0).animation.Play("shoot");
 		this.transform.GetChild(3).GetChild(0).audio.Play ();
 		
+	}
+
+	void OnTriggerStay(Collider c){
+		if(c.gameObject.tag.Equals("Monster")){
+			c.gameObject.GetComponent<MonsterAnimator>().Beatdown();
+		}
+	}
+	
+	void OnTriggerEnter(Collider c){
+		if(c.gameObject.tag.Equals("Monster")){
+			c.gameObject.GetComponent<MonsterAnimator>().LookAtPlayer();
+		}
+	}
+	
+	void OnTriggerExit(Collider c){
+		if(c.gameObject.tag.Equals("Monster")){
+			c.gameObject.GetComponent<MonsterAnimator>().SetSlap(false);
+		}
 	}
 
 }

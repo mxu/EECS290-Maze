@@ -23,8 +23,7 @@ public class GridCreator : MonoBehaviour {
 	public GameObject monsters;
 	public GameObject batPacks;
 	public GameObject healthPacks;
-
-	public int NumMonsters;
+	
 
 	// Use this for initialization
 	void Start () {
@@ -67,7 +66,7 @@ public class GridCreator : MonoBehaviour {
 				numMonsters--;
 			} else {
 				pos.y = .65f;
-				GameObject prefab = Random.Range(0, 10) > 3 ? batPacks : healthPacks;
+				GameObject prefab = Random.Range(0, 10) > 3 ? healthPacks : batPacks;
 				GameObject drop = (GameObject)Instantiate(prefab, pos, Quaternion.identity);
 				drop.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
 				Debug.Log(drop.name + " spawned on cell " + cell.name);

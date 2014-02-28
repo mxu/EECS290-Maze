@@ -2,7 +2,10 @@ fileFormatVersion: 2
 guid: 8a60b69b241c04f5680834c285146b1b
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - hp: {instanceID: 0}
+  - lp: {instanceID: 0}
+  - bullet: {fileID: 400004, guid: f97c5ff5b5abe4945b89f5b308677e27, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

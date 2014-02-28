@@ -15,7 +15,7 @@ public class BulletScript : MonoBehaviour {
 			Destroy(this.gameObject);
 		}
 		if (col.gameObject.CompareTag("Monster")) {
-			col.transform.GetComponent<MonsterAnimator>().dealDamage(.5f);
+			col.transform.GetComponent<MonsterAnimator>().DealMonsterDamage(.5f);
 			Destroy(this.gameObject);
 		}
 	}
